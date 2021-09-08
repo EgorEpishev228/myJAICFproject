@@ -55,24 +55,25 @@ val mainScenario = Scenario {
     }*/
 
 
-   state("start") {
-       activators {
-           regex("/start")
-           intent("Hello")
-           intent("LetsPlay")
-       }
-       action {
-           if (context.client["welcome"] == null) {
-               context.client["welcome"] = true
-               reactions.say("Привет! Сыграем в игру \"Быки и коровы\"? Чтобы узнать правила, пиши \"правила\".")
-           } else if (context.client["win"] == true) {
-               context.client["win"] = null
-               reactions.say("Хочешь снова сыграть в \"Быки и коровы\"? Если забыл правила, пиши \"правила\".")
-           } else {
-               reactions.say("Хочешь сыграть в \"Быки и коровы\"? Если нужно напомнить правила, пиши \"правила\".")
-           }
-       }
-   }
+    state("start") {
+        activators {
+            regex("/start")
+            intent("Hello")
+            intent("LetsPlay")
+        }
+        action {
+            if (context.client["welcome"] == null) {
+                context.client["welcome"] = true
+                reactions.say("Привет! Сыграем в игру \"Быки и коровы\"? Чтобы узнать правила, пиши \"правила\".")
+            } else if (context.client["win"] == true) {
+                context.client["win"] = null
+                reactions.say("Хочешь снова сыграть в \"Быки и коровы\"? Если забыл правила, пиши \"правила\".")
+            } else {
+                reactions.say("Хочешь сыграть в \"Быки и коровы\"? Если нужно напомнить правила, пиши \"правила\".")
+            }
+            reactions.buttons("да" toState "/yes", "нет" toState "/no", "правила" toState "/rules")
+        }
+    }
 
     state("rules") {
         activators {
@@ -87,6 +88,7 @@ val mainScenario = Scenario {
                             "            В результате это две <b>коровы</b> (две цифры: \"2\" и \"3\" — угаданы на неверных позициях) и один <b>бык</b> (одна цифра \"1\" угадана вплоть до позиции)." +
                             "            Начинаем?"
                 )
+                buttons("да" toState "/yes", "нет" toState "/no")
             }
         }
     }
